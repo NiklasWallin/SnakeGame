@@ -21,6 +21,9 @@ public:
     void keyPressEvent(QKeyEvent * event);
 
 private:
+    void checkCollision();
+    void follow();
+    void getDirection();
 
 public slots:
     void move();

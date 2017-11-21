@@ -48,7 +48,7 @@ Game::Game()
 void Game::gameOverBro()
 {
     if(gameover){
-        qDebug() << "ending game cuz u lost bro, you got the score " << game->points;
+        qDebug() << "\nGAME OVER.\n\nYou got the score " << game->points;
         QApplication::quit();
     }
 

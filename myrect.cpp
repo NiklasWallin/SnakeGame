@@ -6,17 +6,10 @@
 #include <QDebug>
 #include <typeinfo>
 #include <QList>
-#include <QApplication>
-#include <QVector>
-#include <QtCore>
 
 extern Game * game; //added the global object Game
 
-QList<MyRect> bodylist;
-extern MyRect * bodyArray[3];
-extern QVector<MyRect> bodyVector;
-extern QPainter *painter;
-extern QBrush brush;
+QList<MyRect*> bodylist;
 
 MyRect::MyRect(){
 
@@ -48,14 +41,11 @@ void MyRect::keyPressEvent(QKeyEvent *event){
     }
 }
 
-
-void MyRect::move(){
-    //if player is colliding with fruit
-
+void MyRect::checkCollision()
+{
     QList<QGraphicsItem *> colliding_items = collidingItems();
     int collideX;
     int collideY;
-
 
     for(int i = 0; i < colliding_items.size(); i++){
         //check if colliding with snakebody
@@ -67,51 +57,61 @@ void MyRect::move(){
 
         }else if(typeid(*(colliding_items[i])) == typeid(Fruit)){
            if(colliding_items[i]->x() == this->x() && colliding_items[i]->y() == this->y()){
+
                //adding to score
                 game->points++;
+
                //remove fruit
                 scene()->removeItem(colliding_items[i]);
+
                 //delete from memory
                 delete colliding_items[i];
 
+                //get
                 collideX = this->pos().x();
                 collideY = this->pos().y();
 
-                fruitCollision = true;
                 MyRect * test = new MyRect(collideX,collideY);
+                bodylist.append(test);
+                scene()->addItem(bodylist.back());
 
-                scene()->addItem(test);
 
                 Fruit * fruit = new Fruit();
                 scene()->addItem(fruit);
            }
         }
     }
+}
 
-/*
-    //make body follow head                                         this is very you stoped, this is fucked up... try arrays...
+void MyRect::follow()
+{
     int testX = this->pos().x();
     int testY = this->pos().y();
     int oldX;
     int oldY;
+    int oldX2;
+    int oldY2;
 
-    for(int i = 0; i < bodylist->length(); i++){
+    for(int i = 0; i < bodylist.length(); i++){
+
         if(i == 0){
-            bodylist[i].first().setPos(testX,testY);
-        }else{
-            oldX = bodylist[i - 1].last().pos().x();
-            oldY = bodylist[i - 1].last().pos().y();
+            oldX = bodylist[i]->pos().x();
+            oldY = bodylist[i]->pos().y();
+            bodylist[i]->setPos(testX,testY);
 
-           // iter->next().setPos(oldX,oldY);
+        }else {
+            oldX2 = bodylist[i]->pos().x();
+            oldY2 = bodylist[i]->pos().y();
+            bodylist[i]->setPos(oldX,oldY);
+            oldX = oldX2;
+            oldY = oldY2;
 
-            //iter->next().setPos(oldX,oldY);
-
-            bodylist->at(i).setPos(oldX,oldY);
         }
     }
-*/
+}
 
-    //move to the direction pressed last
+void MyRect::getDirection()
+{
     if(thedirection == 2){
         if(pos().x() != 0){
             setPos(x()-50,y());
@@ -136,8 +136,13 @@ void MyRect::move(){
         }else
             game->gameover = true;
     }
-
     game->gameOverBro();
+}
 
-    qDebug() << "x possition = " << pos().x() << " y possition = " << pos().y();
+
+
+void MyRect::move(){
+    checkCollision();
+    follow();
+    getDirection();
 }
