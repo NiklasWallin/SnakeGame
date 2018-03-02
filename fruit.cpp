@@ -19,6 +19,6 @@ Fruit::Fruit(){
 
     setPos(fruitX,fruitY);
     setRect(0,0,50,50);
-
+    this->setBrush(QBrush(Qt::lightGray));
     qDebug() << "x = " << fruitX << " y = " << fruitY;
 }

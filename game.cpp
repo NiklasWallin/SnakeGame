@@ -9,6 +9,7 @@
 #include <QGraphicsView>
 extern Game * game;
 QGraphicsView * view;
+
 Game::Game()
 {
     //create a scene
@@ -25,9 +26,11 @@ Game::Game()
     //make item focusable
     player->setFlag(QGraphicsItem::ItemIsFocusable);
     player->setFocus();
+    player->setBrush(QBrush(Qt::black));
 
     //creating fruit
     Fruit * fruit = new Fruit();
+    fruit->setBrush(QBrush(Qt::lightGray));
     scene->addItem(fruit);
 
     //creating score
@@ -41,6 +44,7 @@ Game::Game()
     view->show();
     view->setFixedSize(600,600);
     scene->setSceneRect(0,0,600,600);
+    scene->setBackgroundBrush(QBrush(Qt::white));
     player->setPos(view->width()/2,view->height()/2 - player->rect().height());
 
 }

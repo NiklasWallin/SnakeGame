@@ -20,6 +20,12 @@ MyRect::MyRect(){
 
 }
 
+void MyRect::move(){
+    checkCollision();
+    follow();
+    getDirection();
+}
+
 MyRect::MyRect(int x, int y)
 {
     setPos(x,y);
@@ -67,7 +73,7 @@ void MyRect::checkCollision()
                 //delete from memory
                 delete colliding_items[i];
 
-                //get
+                //get a new snakebody
                 collideX = this->pos().x();
                 collideY = this->pos().y();
 
@@ -107,6 +113,7 @@ void MyRect::follow()
             oldY = oldY2;
 
         }
+        bodylist[i]->setBrush(QBrush(Qt::darkGray));
     }
 }
 
@@ -141,8 +148,4 @@ void MyRect::getDirection()
 
 
 
-void MyRect::move(){
-    checkCollision();
-    follow();
-    getDirection();
-}
+

@@ -4,7 +4,7 @@
 #include <QObject>
 #include <stdlib.h>
 
-class Fruit: public QObject,public QGraphicsRectItem{
+class Fruit: public QObject,public QGraphicsRectItem {
     Q_OBJECT
 public:
     Fruit();
